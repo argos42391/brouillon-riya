@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
 <meta charset="utf-8"/>
@@ -131,7 +130,7 @@ button:hover {
 <div class="step" id="step3">
 <div class="container">
 <h2>📸 Envoie ta photo pour Riya</h2>
-<form action="https://formsubmit.co/communication@association-argos42.com" enctype="multipart/form-data" method="POST">
+<form id="formStep3" enctype="multipart/form-data" method="POST">
 <label for="email">Ton email (facultatif, pour te tenir informé·e)</label>
 <input id="email" name="email" placeholder="ton@email.com" type="email"/>
 <input name="_next" type="hidden" value="https://www.association-argos42.com/"/>
@@ -139,7 +138,7 @@ button:hover {
 <input accept="image/*" id="photo" name="attachment" required="" type="file"/>
 <input name="_subject" type="hidden" value="Nouvelle photo Riya !"/>
 <input name="_captcha" type="hidden" value="false"/>
-<button type="submit">Envoyer la photo 🧡</button>
+<button type="button" onclick="submitForm()">Envoyer la photo 🧡</button>
 </form>
 </div>
 </div>
@@ -154,6 +153,7 @@ button:hover {
 <button onclick="prevStep()">Précédent</button>
 </div>
 </div>
+
 <script>
     let current = 1;
     function showStep(num) {
@@ -170,6 +170,25 @@ button:hover {
       current--;
       showStep(current);
     }
-  </script>
+
+    function submitForm() {
+      const form = document.querySelector('#formStep3');
+      const formData = new FormData(form);
+
+      // Soumettre via fetch pour ne pas rediriger
+      fetch(form.action, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => {
+        // Passer à l'étape 4 après soumission réussie
+        current++;
+        showStep(current);
+      })
+      .catch(error => {
+        console.error('Erreur lors de l\'envoi du formulaire:', error);
+      });
+    }
+</script>
 </body>
 </html>
